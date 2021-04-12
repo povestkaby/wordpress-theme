@@ -1,0 +1,10 @@
+{
+    "name": "povestkaby/wordpress-theme",
+    "authors": [
+        {
+            "name": "Siamion Haurylenka",
+            "email": "2507496@gmail.com"
+        }
+    ],
+    "require": {}
+}
