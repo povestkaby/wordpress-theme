@@ -247,21 +247,16 @@ jQuery(document).ready(function( $ ) {
 				if($('#search_advice_wrapper').find('.active').length !== 0) {
 					$('#search_advice_wrapper').hide();
 					$('#header-search-form button[type="submit"]').click();
-					return false;
 				}else{
 					$('#header-search-form button[type="submit"]').click();
-					return false;
-
 				}
 			break;
 			case 27: // escape
 				$('#search_advice_wrapper').hide();
-				return false;
 			break;
 			// делаем переход по подсказке стрелочками клавиатуры
 			case 38: // стрелка вверх
 			case 40: // стрелка вниз
-				I.preventDefault();
 				if(suggest_count){
 					//делаем выделение пунктов в слое, переход по стрелочкам
 					key_activate( I.keyCode-39 );
