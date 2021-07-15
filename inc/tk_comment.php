@@ -20,7 +20,7 @@ function _tk_comment( $comment, $args, $depth ) {
 				<div class="media-body-wrap panel panel-default">
 
 					<div class="panel-heading">
-						<h5 class="media-heading"><?php printf( __( '<b>%s</b> написал ', '_tk' ), get_comment_author() ); ?>
+						<h5 class="media-heading"><?php printf( __( '<strong>%s</strong> написал ', '_tk' ), get_comment_author() ); ?>
 							<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
 								<time datetime="<?php comment_time( 'c' ); ?>">
 									<?php printf( _x( '%1$s в %2$s', '1: date, 2: time', '_tk' ), get_comment_date(), get_comment_time() ); ?>

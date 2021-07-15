@@ -355,11 +355,11 @@ function place_list_action_callback() {
 				$array['id']			= $j++;
 				$array['geometry']		= array("type"=> "Point", 'coordinates'=> array(doubleval($location['lat']), doubleval($location['lng'])));
 				if( has_term( 'military-registration', 'place-cat', $pst->ID ) ){
-					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+					$array['properties']	= array('balloonContent'=> '<strong>'.get_the_title($pst->ID).'</strong><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
 				}elseif( has_term( 'sluzhby-pomoshhi-prizyvnikam', 'place-cat', $pst->ID ) ){
-					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+					$array['properties']	= array('balloonContent'=> '<strong>'.get_the_title($pst->ID).'</strong><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
 				}else{
-					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+					$array['properties']	= array('balloonContent'=> '<strong>'.get_the_title($pst->ID).'</strong><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
 				}
 				$array['options']		= array('preset'=> 'islands#'. get_field('ymap_placemark_color', 'place-cat_'.$cat_id[0]) .'DotIcon');
 				
@@ -376,11 +376,11 @@ function place_list_action_callback() {
 				$array['id']			= $j++;
 				$array['geometry']		= array("type"=> "Point", 'coordinates'=> array(doubleval($location['lat']), doubleval($location['lng'])));
 				if( has_term( 'military-registration', 'place-cat', $pst->ID ) ){
-					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+					$array['properties']	= array('balloonContent'=> '<strong>'.get_the_title($pst->ID).'</strong><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
 				}elseif( has_term( 'sluzhby-pomoshhi-prizyvnikam', 'place-cat', $pst->ID ) ){
-					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+					$array['properties']	= array('balloonContent'=> '<strong>'.get_the_title($pst->ID).'</strong><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
 				}else{
-					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+					$array['properties']	= array('balloonContent'=> '<strong>'.get_the_title($pst->ID).'</strong><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
 				}
 				$array['options']		= array('preset'=> 'islands#'. get_field('ymap_placemark_color', 'place-cat_'.$cat_id[0]) .'DotIcon');
 				
@@ -642,9 +642,8 @@ function homepage_posts($query){
 add_action('pre_get_posts', 'homepage_posts');
 
 // Clear items that are older than 22 days (i.e. keep only the most recent 22 days in the log)
-add_filter( 'simple_history/db_purge_days_interval', function( $days ) {
-	$days = 365;
-	return $days;
+add_filter( 'simple_history/db_purge_days_interval', function() {
+	return 365;
 } );
 
 // define the bp_template_redirect callback 

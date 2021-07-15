@@ -193,12 +193,12 @@ function profile_settings_keys_function() {
 						update_user_meta( $current_user->ID, 'auth_vk', $user_profile->identifier );
 						bp_core_add_message( "Учетная запись привязана к акаунту", 'success' );
 					}else{
-						bp_core_add_message( "<b>Произошла ошибка</b>: эта учетная запись привязана к дургому аккаунту", 'error' );
+						bp_core_add_message( "<strong>Произошла ошибка</strong>: эта учетная запись привязана к дургому аккаунту", 'error' );
 					}
 					$adapter->logout();
 				}
 				catch( Exception $e ){
-					bp_core_add_message( "<b>Произошла ошибка:</b> " . $e->getMessage(), 'error' );
+					bp_core_add_message( "<strong>Произошла ошибка:</strong> " . $e->getMessage(), 'error' );
 				}
 
 			}elseif (isset($_POST['remove_soc_vk'])) {
@@ -217,12 +217,12 @@ function profile_settings_keys_function() {
 						update_user_meta( $current_user->ID, 'auth_fb', $user_profile->identifier );
 						bp_core_add_message( "Учетная запись привязана к акаунту", 'success' );
 					}else{
-						bp_core_add_message( "<b>Произошла ошибка</b>: эта учетная запись привязана к дургому аккаунту", 'error' );
+						bp_core_add_message( "<strong>Произошла ошибка</strong>: эта учетная запись привязана к дургому аккаунту", 'error' );
 					}
 					$adapter->logout();
 				}
 				catch( Exception $e ){
-					bp_core_add_message( "<b>Произошла ошибка:</b> " . $e->getMessage(), 'error' );
+					bp_core_add_message( "<strong>Произошла ошибка:</strong> " . $e->getMessage(), 'error' );
 				}
 
 			}elseif (isset($_POST['remove_soc_fb'])) {
@@ -241,12 +241,12 @@ function profile_settings_keys_function() {
 						update_user_meta( $current_user->ID, 'auth_google', $user_profile->identifier );
 						bp_core_add_message( "Учетная запись привязана к акаунту", 'success' );
 					}else{
-						bp_core_add_message( "<b>Произошла ошибка</b>: эта учетная запись привязана к дургому аккаунту", 'error' );
+						bp_core_add_message( "<strong>Произошла ошибка</strong>: эта учетная запись привязана к дургому аккаунту", 'error' );
 					}
 					$adapter->logout();
 				}
 				catch( Exception $e ){
-					bp_core_add_message( "<b>Произошла ошибка:</b> " . $e->getMessage(), 'error' );
+					bp_core_add_message( "<strong>Произошла ошибка:</strong> " . $e->getMessage(), 'error' );
 				}
 
 			}elseif (isset($_POST['remove_soc_google'])) {

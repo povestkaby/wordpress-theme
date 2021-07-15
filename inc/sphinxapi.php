@@ -1406,8 +1406,8 @@ class SphinxClient
 		// fixup options
 		/////////////////
 
-		if ( !isset($opts["before_match"]) )		$opts["before_match"] = "<b>";
-		if ( !isset($opts["after_match"]) )			$opts["after_match"] = "</b>";
+		if ( !isset($opts["before_match"]) )		$opts["before_match"] = "<strong>";
+		if ( !isset($opts["after_match"]) )			$opts["after_match"] = "</strong>";
 		if ( !isset($opts["chunk_separator"]) )		$opts["chunk_separator"] = " ... ";
 		if ( !isset($opts["field_separator"]) )		$opts["field_separator"] = "<br>";
 		if ( !isset($opts["limit"]) )				$opts["limit"] = 256;

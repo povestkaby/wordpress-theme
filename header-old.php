@@ -107,7 +107,7 @@
 												<?php wp_login_form(); ?>
 											</div>
 											<div class="ap-login-buttons">
-												<a href="<?php echo esc_url( wp_registration_url() ); ?>"><b><?php esc_attr_e( 'Register', 'anspress-question-answer' ); ?></b></a>
+												<a href="<?php echo esc_url( wp_registration_url() ); ?>"><strong><?php esc_attr_e( 'Register', 'anspress-question-answer' ); ?></strong></a>
 											</div>
 										</div>
 									</li>

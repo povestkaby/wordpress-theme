@@ -120,7 +120,7 @@
 											<div class="media-body">
 												<div class="media-body-wrap panel panel-default">
 													<div class="panel-heading">
-														<h5 class="media-heading"><b><?php echo $user_info->display_name; ?></b> <span class="hidden-xs">оставил(а) отзыв </span>в <time datetime="<?php echo mysql2date( 'c', $review->date ); ?>"><?php echo mysql2date( 'd.m.Y', $review->date ); ?> в <?php echo mysql2date( 'H:i', $review->date ); ?></time><?php if( count($answer) == 0 AND (empty(get_field('agent', get_the_ID())) OR $current_user->ID == get_field('agent', get_the_ID()))) { ?><span class="pull-right"><a href="#" class="show-button" data-show="<?php echo $review->id; ?>-form">Ответить</a></span><?php } ?></h5>
+														<h5 class="media-heading"><strong><?php echo $user_info->display_name; ?></strong> <span class="hidden-xs">оставил(а) отзыв </span>в <time datetime="<?php echo mysql2date( 'c', $review->date ); ?>"><?php echo mysql2date( 'd.m.Y', $review->date ); ?> в <?php echo mysql2date( 'H:i', $review->date ); ?></time><?php if( count($answer) == 0 AND (empty(get_field('agent', get_the_ID())) OR $current_user->ID == get_field('agent', get_the_ID()))) { ?><span class="pull-right"><a href="#" class="show-button" data-show="<?php echo $review->id; ?>-form">Ответить</a></span><?php } ?></h5>
 													</div>
 													<div class="comment-content panel-body">
 														<?php echo apply_filters( 'the_content',  html_entity_decode($review->comment, ENT_HTML5 | ENT_QUOTES) ); ?>

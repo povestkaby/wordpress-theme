@@ -21,15 +21,15 @@
 				<div class="jumbotron">
 					<div class="row">
 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							<?php if ( has_post_thumbnail() ) { /* ?>
-								<img src="<?php echo get_the_post_thumbnail_url( get_the_ID(), array (250,250) ); ?>" class="img-responsive center-block">
-							<?php */ }else { ?>
-								<img src="https://povestka.by/wp-content/themes/stable/img-old/house-icon.png" alt="<?php the_title();?>" class="img-responsive center-block">
+							<?php if ( has_post_thumbnail() ) { ?>
+								<img src="<?php echo get_the_post_thumbnail_url( get_the_ID(), array (250,250) ); ?>" alt="<?php the_title_attribute(); ?>" class="img-responsive center-block">
+							<?php }else { ?>
+								<img src="https://povestka.by/wp-content/themes/stable/img-old/house-icon.png" alt="<?php the_title_attribute(); ?>" class="img-responsive center-block">
 							<?php } ?>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							Адрес: <?php if( get_field('Address') ) { ?><b><?php the_field('Address'); ?></b><?php } ?><br>
-							ФИО Военкома: <?php if( get_field('commissar') ) { ?><b><?php the_field(commissar); ?></b><?php }else { echo "Напишите данные о военкоме в комментарии";} ?><br>
+							Адрес: <?php if( get_field('Address') ) { ?><strong><?php the_field('Address'); ?></strong><?php } ?><br>
+							ФИО Военкома: <?php if( get_field('commissar') ) { ?><strong><?php the_field(commissar); ?></strong><?php }else { echo "Напишите данные о военкоме в комментарии";} ?><br>
 							<?php the_content(); ?>
 						</div>
 					</div>

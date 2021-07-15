@@ -52,7 +52,7 @@
     	<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<img class="mx-auto img_logo" src="https://povestka.by/wp-content/themes/stable/img/header/logo-small.png">
+					<img class="mx-auto img_logo" src="https://povestka.by/wp-content/themes/stable/img/header/logo-small.png" alt="Логотип Центра прав призывника">
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
                 

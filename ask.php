@@ -87,7 +87,7 @@ get_header('old'); ?>
 								  <i class="fa fa-question-circle" aria-hidden="true"></i>
 								</div>
 								<div class="media-body">
-									<b>Перед тем как задать вопрос ознакомьтесь с <a href="https://povestka.by/faq/">FAQ</a> и <a href="https://povestka.by/wiki/directory/">справочником</a>.</b>
+									<strong>Перед тем как задать вопрос ознакомьтесь с <a href="https://povestka.by/faq/">FAQ</a> и <a href="https://povestka.by/wiki/directory/">справочником</a>.</strong>
 								</div>
 							</div>
 							<hr>
