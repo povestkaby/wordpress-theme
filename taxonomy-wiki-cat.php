@@ -12,7 +12,7 @@
 								<meta itemprop="position" content="2" />
 							</li>
 							<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" class="hidden">
-								<a itemscope itemtype="http://schema.org/Thing" itemprop="item" href="https://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; ?>"><span itemprop="name"><?php single_term_title(); ?></span></a>
+								<a itemscope itemtype="http://schema.org/Thing" itemprop="item" href="<?php echo home_url( $wp->request . '/' ); ?>"><span itemprop="name"><?php single_term_title(); ?></span></a>
 								<meta itemprop="position" content="3" />
 							</li>
 						</ol>

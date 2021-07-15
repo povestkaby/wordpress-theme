@@ -1181,11 +1181,9 @@ li {
 		max-width: 100px;
 	}
 	.modal-content {
-		background-color: #ececec;
 		border: 1px solid #bdc3c7;
 		border-radius: 20px;
-		background: url(../img/header/bg.svg) top right no-repeat #fbf9fa;
-		background-size: 70%;
+		background: url(../img/header/bg.svg) top right/70% no-repeat #fbf9fa;
 	}
 	.modal-header {
 		min-height: 16.43px;
