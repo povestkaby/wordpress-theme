@@ -81,9 +81,9 @@ jQuery(document).ready(function( $ ) {
     var $msgShowTime = 2000;
 
     $("#login-modal form").submit(function (e) {
+		e.preventDefault();
         switch(this.id) {
             case "login-form":
-				e.preventDefault();
 				var height = $('#login-form').height();
 				
 				$formLoading.height(height);
@@ -123,10 +123,8 @@ jQuery(document).ready(function( $ ) {
 						}
 					}
 				});
-                return false;
                 break;
             case "lost-form":
-				e.preventDefault();
 				var height = $('#lost-form').height();
 //				console.log(height);
 				
@@ -153,15 +151,12 @@ jQuery(document).ready(function( $ ) {
 							document.location.reload();
 						}, 5000); 							
 					}
-				});			
-                return false;
+				});
                 break;
             case "register-form":
-
-                return false;
                 break;
             default:
-                return false;
+			break;
         }
         return false;
     });
