@@ -8,22 +8,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Main css -->
-    <link rel="stylesheet" href="https://povestka.by/wp-content/themes/stable/style/style.css">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/style/style.css?1620484077002">
 	<?php wp_head(); ?>
 
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="apple-mobile-web-app-title" content="Центр прав призывника">
-<meta name="application-name" content="Центр прав призывника">
-<meta name="msapplication-TileColor" content="#da532c">
-<meta name="msapplication-TileImage" content="/mstile-144x144.png">
-<meta name="theme-color" content="#ffffff">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="apple-mobile-web-app-title" content="Центр прав призывника">
+	<meta name="application-name" content="Центр прав призывника">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+	<meta name="theme-color" content="#ffffff">
 
 </head>
 
@@ -101,16 +101,17 @@
                         <a href="/" class="header__top-logo">
                         </a>
                     </div>
-                    <div class="col-2 col-sm-1 col-md-1 header__top-burger">
+                    <div class="col-3 header__top-burger">
                         <!-- Меню в виде бургера -->
                         <i class="icon-bars"></i>
                     </div>
                     <div class="col-sm-10 offset-sm-1 col-md-10 offset-md-1 col-lg-5 col-xl-6 offset-xl-0 header__top-input">
-						<form action="/s/" method="get">
-							<input name="text" type="text" placeholder="Поиск по сайту" required autocomplete="off">
-							<input name="searchid" type="text" value="2354269" hidden>
+						<form id="header-search-form" role="search" method="get" action="/">
+							<input type="search" value="<?php echo htmlspecialchars($_GET["s"]) ?>" class="who" placeholder="Поиск по сайту" name="s" required autocomplete="off">
 							<button type="submit" class="btn btn-link header__top-search"><i class="icon-search"></i></button>
+							<div id="search_advice_wrapper"></div>
 						</form>
+						
                     </div>
 					<?php if ( is_user_logged_in() ) { ?>
                     <div class="col-md-1 offset-md-1 d-flex justify-content-end">
@@ -124,7 +125,7 @@
                     <div class="col-md-1 d-flex justify-content-end">
                         <div class="header__profile">
                             <a href="<?php echo bp_core_get_user_domain($current_user->ID); ?>my/">
-								<i class="icon-profile"></i>
+								<img class="header__profile-img" alt="" src="https://povestka.by/wp-content/themes/stable/img/header/profile.svg">
                             </a>
                         </div>
                     </div>
@@ -136,3 +137,4 @@
                 </div>
             </div>
         </div>
+	 </header>

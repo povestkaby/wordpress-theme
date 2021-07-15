@@ -27,6 +27,7 @@
 					<li class="list-inline-item"><a href="https://vk.com/ags_by" target="_blank" rel="noreferrer nofollow"><i class="icon-vk"></i></a></li>
 					<li class="list-inline-item"><a href="https://www.facebook.com/ags.by/" target="_blank" rel="noreferrer nofollow"><i class="icon-facebook-f"></i></a></li>
 					<li class="list-inline-item"><a href="https://t.me/povestkaby" target="_blank" rel="noreferrer nofollow"><i class="icon-telegram-plane"></i></a></li>
+					<li class="list-inline-item"><a href="viber://pa?chatURI=povestkaby" target="_blank" rel="noreferrer nofollow"><i class="icon-viber"></i></a></li>
 				</ul>
 				<p>
                     По вопросам сотрудничества и рекламы: info@povestka.by
@@ -85,7 +86,6 @@
 							  <label for="password" class="form-label">пароль</label>
 							  <input type="password" name="password" class="form-control" placeholder="" required>
 							</div>
-							<?php wp_nonce_field( 'ajax-login', 'security' ); ?>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="remember"> Запомнить меня
@@ -115,7 +115,6 @@
 								<label for="email" class="form-label">e-mail</label>
 								<input type="email" name="email" class="form-control" placeholder="" required>
 							</div>
-							<?php wp_nonce_field( 'ajax-login', 'security' ); ?>
             			</div>
 		    		    <div class="modal-footer">
 							<div class="">
@@ -168,11 +167,28 @@
 			ym(27034011, 'reachGoal', 'error404', {URL: document.location.href});
 	<?php } ?>
 	</script>
-    <!-- jQuery -->
-    <script src="https://povestka.by/wp-content/themes/stable/js/slick.min.js"></script>
-    <!-- Bootstrap5 -->
-    <script src="https://povestka.by/wp-content/themes/stable/js/bootstrap.min.js"></script>
-    <!-- Main Js -->
-    <script src="https://povestka.by/wp-content/themes/stable/js/main.js"></script>
+	<?php if( get_current_user_id() == 1 ){ ?>
+	<style>
+	.breakpoint{
+		position: fixed;
+		top:40px;
+		right:10px;
+		background-color:red;
+		color:white;
+		display:none;
+		z-index: 99999;
+		padding: 5px;
+		font-size: 20px;
+	}
+	</style>
+	<div class="breakpoint d-block d-sm-none">xs</div>
+	<div class="breakpoint d-none d-sm-block d-md-none">sm</div>
+	<div class="breakpoint d-none d-md-block d-lg-none">md</div>
+	<div class="breakpoint d-none d-lg-block d-xl-none">lg</div>
+	<div class="breakpoint d-none d-xl-block d-xxl-none">xl</div>
+	<div class="breakpoint d-none d-xxl-block">xxl</div>
+
+	
+	<?php } ?>
 </body>
 </html>

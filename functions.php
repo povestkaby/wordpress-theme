@@ -1,4 +1,19 @@
 <?php
+//require_once('inc/maintenance.php');
+
+
+//----START LEGACY CODE
+require_once('inc/disable-user-registration-notification-emails.php');
+require_once('inc/wp_bootstrap_navwalker.php');
+require_once('inc/russian-number-comments.php');
+require_once('inc/tk_comment.php');
+require_once('inc/wp_pagination.php');
+require_once('inc/function_please_confirm_number.php');
+require_once('inc/function_birthday.php');
+require_once('inc/function_admin-profile.php');
+require_once('inc/buddypress.php');
+require_once('inc/function_rating.php');
+require_once('inc/sphinxapi.php');
 
 add_theme_support('post-thumbnails'); //Поддержка миниатюр
 add_theme_support( 'title-tag' );
@@ -48,29 +63,7 @@ function vc_remove_wp_ver_css_js( $src ) {
 add_filter( 'style_loader_src', 'vc_remove_wp_ver_css_js', 9999 );
 add_filter( 'script_loader_src', 'vc_remove_wp_ver_css_js', 9999 );
 
-function my1_scripts_method() {
-    wp_enqueue_script( 'jquery' );
-	if(is_page('test')){
-		wp_enqueue_script( 'es6-shim', '//cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js', array('jquery') );
-		wp_enqueue_script( 'formvalidation', get_template_directory_uri() . '/vendor/formvalidation/dist/js/FormValidation.full.min.js' ); 
-		wp_enqueue_script( 'formvalidation-bootstrap', get_template_directory_uri() . '/vendor/formvalidation/dist/js/plugins/Bootstrap3.min.js' ); 
-	}else{
-		wp_enqueue_script( 'bootstrap-validator', '//cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js', array('bootstrap') ); // https://cdnjs.com/libraries/bootstrap-validator
-	}
-	if(is_front_page() AND !is_user_logged_in() OR !is_front_page()){
-		wp_enqueue_script( 'bootstrap', get_template_directory_uri() . '/js-old/bootstrap.min.js' );
-		wp_enqueue_script( 'bootstrap-datepicker', get_template_directory_uri() . '/vendor/bootstrap-datepicker-1.9.0/js/bootstrap-datepicker.min.js', array('bootstrap') );
-		wp_enqueue_script( 'bootstrap-datepicker-locale', get_template_directory_uri() . '/vendor/bootstrap-datepicker-1.9.0/locales/bootstrap-datepicker.ru.min.js', array('bootstrap-datepicker') );
-	}
 
-	wp_dequeue_style( 'wp-block-library' );
-	wp_deregister_style( 'bp-nouveau' ); 
-	wp_deregister_style( 'bp-members-block' ); 
-	wp_deregister_style( 'bp-member-block' ); 
-	wp_dequeue_script('bp-nouveau');
-	wp_dequeue_script('comment-reply');
-}    
-add_action( 'wp_enqueue_scripts', 'my1_scripts_method' );
 
 
 
@@ -84,7 +77,7 @@ function footer_enqueue_scripts(){
 	add_action('wp_footer','wp_print_head_scripts',5);
 	add_action('wp_footer','wp_print_scripts',5);
 }
-add_action('after_setup_theme','footer_enqueue_scripts');
+//add_action('after_setup_theme','footer_enqueue_scripts');
 
 function add_responsive_class($content){
 	if( !empty($content) ) {
@@ -337,6 +330,7 @@ add_action( 'wp_footer', 'place_inline_script' );
 function place_list_action_callback() {
 	check_ajax_referer( 'security', 'security' );
 	$json = array();
+	$j=0;
 	$json['type'] = 'FeatureCollection';
 		
 	$my_posts = new WP_Query;
@@ -347,54 +341,55 @@ function place_list_action_callback() {
 	) );
 	$places = array();
 	foreach( $myposts as $pst ){
-		$location = get_field('coordinates', $pst->ID);
-		$location1 = get_field('coordinates1', $pst->ID);
-		if(!is_array($location)){
-			continue;
-//			$location = array('lat' => 0, 'lng'=>0);
-		}
 		$cat_id = wp_get_post_terms( $pst->ID, 'place-cat', array('orderby' => 'parent ', 'fields' => 'ids') );
+		
+		if( have_rows('coordinates_new', $pst->ID) ) {
+			while( have_rows('coordinates_new', $pst->ID) ) { the_row();
+				$location = get_sub_field('coordinates');
+				if(!is_array($location)){
+					continue; //$location = array('lat' => 0, 'lng'=>0);
+				}
 
-		$array = array();
-		$array['type']			= "Feature";
-		$array['id']			= $pst->ID;
-		$array['geometry']		= array("type"=> "Point", 'coordinates'=> array(doubleval($location['lat']), doubleval($location['lng'])));
-		if( has_term( 'military-registration', 'place-cat', $pst->ID ) ){
-			$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
-		}elseif( has_term( 'sluzhby-pomoshhi-prizyvnikam', 'place-cat', $pst->ID ) ){
-			$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
-		}else{
-			$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
-		}
-		$array['options']		= array('preset'=> 'islands#'. get_field('ymap_placemark_color', 'place-cat_'.$cat_id[0]) .'DotIcon');
-		
-		array_push($places, $array);
-		
-		if(is_array($location1)){
-			$array = array();
-			$array['type']			= "Feature";
-			$array['id']			= $pst->ID."1";
-			$array['geometry']		= array("type"=> "Point", 'coordinates'=> array(doubleval($location1['lat']), doubleval($location1['lng'])));
-			if( has_term( 'military-registration', 'place-cat', $pst->ID ) ){
-				$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
-			}elseif( has_term( 'sluzhby-pomoshhi-prizyvnikam', 'place-cat', $pst->ID ) ){
-				$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
-			}else{
-				$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+				$array = array();
+				$array['type']			= "Feature";
+				$array['id']			= $j++;
+				$array['geometry']		= array("type"=> "Point", 'coordinates'=> array(doubleval($location['lat']), doubleval($location['lng'])));
+				if( has_term( 'military-registration', 'place-cat', $pst->ID ) ){
+					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+				}elseif( has_term( 'sluzhby-pomoshhi-prizyvnikam', 'place-cat', $pst->ID ) ){
+					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+				}else{
+					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+				}
+				$array['options']		= array('preset'=> 'islands#'. get_field('ymap_placemark_color', 'place-cat_'.$cat_id[0]) .'DotIcon');
+				
+				array_push($places, $array);
 			}
-			$array['options']		= array('preset'=> 'islands#'. get_field('ymap_placemark_color', 'place-cat_'.$cat_id[0]) .'DotIcon');
-			
-			array_push($places, $array);
-			
+		}else {
+				$location = get_field('coordinates', $pst->ID);
+				if(!is_array($location)){
+					continue; //$location = array('lat' => 0, 'lng'=>0);
+				}
+
+				$array = array();
+				$array['type']			= "Feature";
+				$array['id']			= $j++;
+				$array['geometry']		= array("type"=> "Point", 'coordinates'=> array(doubleval($location['lat']), doubleval($location['lng'])));
+				if( has_term( 'military-registration', 'place-cat', $pst->ID ) ){
+					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Подробнее</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+				}elseif( has_term( 'sluzhby-pomoshhi-prizyvnikam', 'place-cat', $pst->ID ) ){
+					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small><br><a class="btn btn-info btn-xs btn-block" href="'.get_permalink($pst->ID).'" role="button" target="_blank">Отзывы и обсуждение</a>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+				}else{
+					$array['properties']	= array('balloonContent'=> '<b>'.get_the_title($pst->ID).'</b><br><small>'.get_field('Address', $pst->ID).'</small>'/*, 'clusterCaption'=> 'clusterCaption', 'myDescription'=>'myDescription'*/);
+				}
+				$array['options']		= array('preset'=> 'islands#'. get_field('ymap_placemark_color', 'place-cat_'.$cat_id[0]) .'DotIcon');
+				
+				array_push($places, $array);
 		}
 	}
 	$json['features'] = $places;
-	echo wp_json_encode($json);
-	unset($my_posts);
-	unset($myposts);
-	unset($places);
-	unset($json);
-	die(); // this is required to return a proper result
+	wp_send_json($json);
+	die();
 }
 if( wp_doing_ajax() ){
 	add_action( 'wp_ajax_place_list', 'place_list_action_callback' );
@@ -614,12 +609,35 @@ function ajax_cema93_is_uniq_email(){
 }
 
 
-function homepage_posts($query)
-{
-    if ($query->is_tax('wiki-cat') && $query->is_main_query() && !$query->is_tax('wiki-cat', array('directory')))
-    {
-        $query->set( 'orderby', 'date' );
-    }
+function homepage_posts($query){
+	if($query->is_main_query() AND !is_admin()){
+		if ($query->is_tax('wiki-cat')){
+			$query->set( 'posts_per_page', -1 );
+			$query->set( 'orderby', 'date' );
+			$query->set( 'order', 'ASC' );
+		}
+		if ($query->is_tax('wiki-cat', array('directory'))){
+			$query->set( 'orderby', 'title' );
+		}
+		if ( is_post_type_archive( 'memory' ) ) {
+			$query->set( 'posts_per_page', -1 );
+		}
+		if ( is_post_type_archive( 'help' ) ) {
+			$query->set( 'posts_per_page', -1 );
+			$meta_query[] = [
+				'key' => 'type',
+				'value' => 'Статья',
+				'compare' => '!='
+			];
+			$query->set('meta_query', $meta_query);
+		}
+		
+		
+	}
+	
+	
+	
+	
 }
 add_action('pre_get_posts', 'homepage_posts');
 
@@ -644,10 +662,107 @@ function action_bp_template_redirect() {
 add_action( 'bp_template_redirect', 'action_bp_template_redirect' ); 
 
 
+//----END LEGACY CODE
+
+function my1_scripts_method() {
+    wp_enqueue_script( 'jquery' );
+	
+	if(is_front_page() OR is_search()){
+		wp_enqueue_script( 'slick', get_stylesheet_directory_uri() . '/js/slick.min.js', array('jquery'), '', true );
+		wp_enqueue_script( 'bootstrap', get_stylesheet_directory_uri() . '/js/bootstrap.min.js', array('slick'), '', true );
+		wp_enqueue_script( 'main', get_stylesheet_directory_uri() . '/js/main.js', array('bootstrap'), '1620484077002', true );
+		wp_localize_script('main', 'new_var', array(
+			'url' => admin_url('admin-ajax.php'),
+			'nonce' => wp_create_nonce('ajax')
+		));
+	}elseif(is_page('test')){
+		wp_enqueue_script( 'es6-shim', '//cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js', array('jquery') );
+		wp_enqueue_script( 'formvalidation', get_template_directory_uri() . '/vendor/formvalidation/dist/js/FormValidation.full.min.js' ); 
+		wp_enqueue_script( 'formvalidation-bootstrap', get_template_directory_uri() . '/vendor/formvalidation/dist/js/plugins/Bootstrap3.min.js' ); 
+	}else{
+		wp_enqueue_script( 'bootstrap-validator', '//cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js', array('bootstrap-old') ); // https://cdnjs.com/libraries/bootstrap-validator
+		wp_enqueue_script( 'bootstrap-old', get_template_directory_uri() . '/js-old/bootstrap.min.js' );
+		wp_enqueue_script( 'bootstrap-datepicker', get_template_directory_uri() . '/vendor/bootstrap-datepicker-1.9.0/js/bootstrap-datepicker.min.js', array('bootstrap-old') );
+		wp_enqueue_script( 'bootstrap-datepicker-locale', get_template_directory_uri() . '/vendor/bootstrap-datepicker-1.9.0/locales/bootstrap-datepicker.ru.min.js', array('bootstrap-datepicker') );
+		if(is_single( 8266 )){
+			wp_enqueue_script( 'bootstrap-notify', 'https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js', array('bootstrap-old') );
+		}
+
+	}
+
+	wp_dequeue_style( 'wp-block-library' );
+	wp_deregister_style( 'anspress-fonts' ); 
+	wp_deregister_style( 'anspress-main' ); 
+	wp_deregister_style( 'bp-nouveau' ); 
+	wp_deregister_style( 'bp-members-block' ); 
+	wp_deregister_style( 'bp-member-block' ); 
+	wp_dequeue_script('bp-nouveau');
+	wp_dequeue_script('comment-reply');
+}    
+add_action( 'wp_enqueue_scripts', 'my1_scripts_method' );
+
+
+add_action( 'pre_get_posts', function( $query ) {
+
+
+    if( $query->is_main_query() && ! is_admin() && $query->is_search()  ) {
+
+
+		$ids = array();
+		$q = str_replace('/', " ", $query->query_vars['s']);
+		$limit = 1000;
+		
+		$cl = new SphinxClient ();
+		$cl->SetServer ( "127.0.0.1", 9307 );
+		$cl->SetLimits ( 0, $limit, ( $limit>1000 ) ? $limit : 1000 );
+		$cl->SetSortMode ( SPH_SORT_RELEVANCE );
+		$res = $cl->Query ( $q, "futured" );
+		$cl->close();
+		if ( $res===false ){
+			wp_mail( '2507496@mail.ru', 'Ошибка на сайте povestka.by', "Query failed: " . $cl->GetLastError() . ". Поисковой запрос: ".$query->query_vars['s'] );
+//			print "Query failed: " . $cl->GetLastError() . ".\n";
+		} else{
+			if ( is_array($res["matches"]) ) {
+				$ids = array_merge($ids, array_keys($res["matches"]));
+			}
+		}
+		$cl = new SphinxClient ();
+		$cl->SetServer ( "127.0.0.1", 9307 );
+		$cl->SetLimits ( 0, $limit, ( $limit>1000 ) ? $limit : 1000 );
+		$cl->SetSortMode ( SPH_SORT_RELEVANCE );
+		$res = $cl->Query ( $q, "other" );
+		$cl->close();
+		if ( $res===false ){
+		} else{
+			if ( is_array($res["matches"]) ) {
+				$ids = array_merge($ids, array_keys($res["matches"]));
+
+			}
+		}
+
+		$ids = array_unique($ids);
+		
+		$query->set( 'post_type', 'any' );
+		if( get_current_user_id() != 1 ){ $query->set( 'post_status', 'publish' ); }else{ $query->set( 'post_status', 'any' ); }
+		$query->set('ignore_sticky_posts', 1);
+		if(count($ids)){
+			$query->set( 'post__in', $ids );
+			$query->set( 'orderby', 'post__in' );
+			$query->set( 's', '' );
+		}elseif(get_current_user_id() == 1){
+			echo "<h1>стандартный поиск wordpress</h2>";			
+		}
+    }
+
+});
+
+
+
 add_action( 'wp_ajax_nopriv_ajaxlogin', function(){
 
-	if(  !wp_verify_nonce( $_POST['security'], 'ajax-login' ) ){
+	if(  !wp_verify_nonce( $_POST['security'], 'ajax' ) ){
 		wp_send_json_error( "Ошибка входа" );
+		die();
 	}
 
     $info = array();
@@ -665,10 +780,13 @@ add_action( 'wp_ajax_nopriv_ajaxlogin', function(){
     die();
 });
 
-add_action( 'wp_ajax_nopriv_ajaxlost', function(){
+add_action( 'wp_ajax_ajaxlost', 'ajaxlost_function' );
+add_action( 'wp_ajax_nopriv_ajaxlost', 'ajaxlost_function');
+function ajaxlost_function() {
 
-	if(  !wp_verify_nonce( $_POST['security'], 'ajax-login' ) ){
+	if(  !wp_verify_nonce( $_POST['security'], 'ajax' ) ){
 		wp_send_json_error( "Ошибка" );
+		die();
 	}
 	$email = $_POST['username'];
 	
@@ -682,7 +800,116 @@ add_action( 'wp_ajax_nopriv_ajaxlost', function(){
 	}
 	wp_send_json_success();
     die();
-});
+}
 
 
+add_action( 'wp_ajax_ajaxsearchhints', 'ajaxsearchhints_function' );
+add_action( 'wp_ajax_nopriv_ajaxsearchhints', 'ajaxsearchhints_function');
+function ajaxsearchhints_function() {
+	$array = array();
+	if(  !wp_verify_nonce( $_POST['security'], 'ajax' ) ){
+		wp_send_json_error( "Ошибка" );
+	}
+	$text = $_POST['text'];
+
+	$my_posts = new WP_Query;
+	$myposts = $my_posts->query( array(
+		'posts_per_page' => 20,
+		'post_type' => array( 'post', 'page', 'memory', 'wiki', 'place', 'help', 'question' ),
+		'orderby' => array( 'relevance' => 'ASC' ),
+		's' => $text
+	) );
+
+	foreach( $myposts as $pst ){
+		array_push($array,  esc_html( $pst->post_title));
+	}
+	if(count($array)){
+		$array = array_unique($array);
+		$array = array_slice($array, 0, 5);
+		echo "['".implode("','", $array)."']";
+	}else{
+		echo "[]";
+	}
+    die();
+}
+
+    // SMTP Authentication
+    add_action('phpmailer_init', 'send_smtp_email');
+    function send_smtp_email($phpmailer) {
+    	$phpmailer->isSMTP();
+    	$phpmailer->Host       = SMTP_HOST;
+    	$phpmailer->SMTPAuth   = SMTP_AUTH;
+    	$phpmailer->Port       = SMTP_PORT;
+    	$phpmailer->Username   = SMTP_USER;
+    	$phpmailer->Password   = SMTP_PASS;
+    	$phpmailer->SMTPSecure = SMTP_SECURE;
+    	$phpmailer->From       = SMTP_FROM;
+    	$phpmailer->FromName   = SMTP_NAME;
+    }
+	
+	
+add_filter('wpseo_opengraph_title','mysite_ogtitle', 999);
+function mysite_ogtitle($title) {
+	if(is_single()){
+		$sepparator = " - ";
+		$the_website_name = $sepparator . get_bloginfo( 'name' );
+		return str_replace( $the_website_name, '', $title ) ;
+	}
+}
+
+
+add_action( 'wp_ajax_LotsUpdate', 'LotsUpdate_function' );
+function LotsUpdate_function() {
+	global $wpdb;
+	$ids = $_POST['ids'];
+	$result = array();
+	
+	foreach ($ids as &$value) {
+		$array= array();
+
+		if(!empty(get_field('автор_последней_ставки', $value)) AND get_field('автор_последней_ставки', $value) == get_current_user_id()) { $current_author = true; }else{ $current_author = false; }
+		$array['id'] = $value;
+		$array['current_cost'] = get_field('текущая_цена', $value);
+		$array['current_author'] = $current_author;
+		$array['author_history'] = array();
+		
+		$author_history = $wpdb->get_results("SELECT author_id, bind, date FROM povestka_wp_auctions_bids WHERE lot_id = $value order by date DESC limit 5");
+		if(count($author_history) >0 ){
+			foreach ( $author_history as $row ) {
+				array_push($array['author_history'], array( 'author' => ap_user_display_name( [ 'user_id' => $row->author_id,'html' => false ] ), 'bind' => $row->bind, 'date' => $row->date ));
+			}
+		}
+			
+			
+		array_push($result, $array);
+	}
+	
+	wp_send_json_success($result);
+    die();
+}
+add_action( 'wp_ajax_PriceUpdate', 'PriceUpdate_function' );
+function PriceUpdate_function() {
+	if(!get_current_user_id() OR empty($_POST['id']) OR empty($_POST['rate']))
+		wp_send_json_error('Попытка взлома!');
+	
+	if(get_field('текущая_цена', $_POST['id']) >= $_POST['rate'])
+		wp_send_json_error('Ваша ставка не может быть ниже или равна текущей стоимости лота!');
+
+	if( strtotime( get_field('дата_окончания_аукциона', $_POST['id']) ) > time())
+		wp_send_json_error('Торги окончены!');
+	
+	global $wpdb;
+	$lot_id = $_POST['id'];
+	$rate = $_POST['rate'];
+	$result = $wpdb->insert( 'povestka_wp_auctions_bids', array( 'lot_id' => $lot_id, 'author_id' => get_current_user_id(), 'bind' => $rate ), array( '%d', '%d', '%d' ));
+
+	if( ! empty($wpdb->error) )
+		wp_send_json_error($wpdb->error );
+
+	update_field('текущая_цена', $rate, $lot_id);
+	update_field('автор_последней_ставки', get_current_user_id(), $lot_id);
+	
+	wp_send_json_success();
+    die();
+}
 ?>
