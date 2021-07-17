@@ -70,7 +70,6 @@
 		if( $result == false){
 			return array( 'error' => 'Ошибка сохранения данных!');
 		}elseif($result > 0){
-			recount_org_reviews((int)$_POST['org']);
 			$_POST = array();
 			return array( 'success' => 'Отзыв сохранён! После проверки отзыв будет опубликован на сайте');
 		}else{

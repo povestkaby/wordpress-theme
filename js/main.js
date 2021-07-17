@@ -77,8 +77,6 @@ jQuery(document).ready(function( $ ) {
     var $formError = $('#login-modal .error-block');
     var $divForms = $('#div-forms');
     var $modalAnimateTime = 300;
-    var $msgAnimateTime = 150;
-    var $msgShowTime = 2000;
 
     $("#login-modal form").submit(function (e) {
 		e.preventDefault();
@@ -105,7 +103,6 @@ jQuery(document).ready(function( $ ) {
 						'security': new_var.nonce
 					},
 					success: function(data){
-//						console.log(data);
 						if(data['success']){
 							$formLoading.hide();
 							$formSuccess.show();
@@ -125,8 +122,7 @@ jQuery(document).ready(function( $ ) {
 				});
                 break;
             case "lost-form":
-				var height = $('#lost-form').height();
-//				console.log(height);
+				height = $('#lost-form').height();
 				
 				$formLoading.height(height);
 				$formSuccess.height(height);
@@ -143,7 +139,6 @@ jQuery(document).ready(function( $ ) {
 						'security': new_var.nonce
 					},
 					success: function(data){
-//						console.log(data);
 						$formLoading.hide();
 						$('#login-modal .success-block .text').html("Проверьте свой email");
 						$formSuccess.show();
@@ -216,12 +211,10 @@ jQuery(document).ready(function( $ ) {
 						},
 						success: function(data){
 							var list = eval("("+data+")");
-//							console.log(data);
 							suggest_count = list.length;
 							if(suggest_count > 0){
 								// перед показом слоя подсказки, его обнуляем
 								$("#search_advice_wrapper").html('<div class="line"></div>');
-//								$('#search_advice_wrapper').append('<div class="line"></div>');
 								for(var i in list){
 									if(list[i] != ''){
 										// добавляем слою позиции

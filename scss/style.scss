@@ -723,7 +723,6 @@ li {
     &__content {
         position: relative;
         background: #fff;
-        position: relative;
 		@include media-breakpoint-down(md) {
 			background: url(../img/front-page/help/help-man.png) top center no-repeat;
 			background-size: 30vh;
@@ -1486,7 +1485,6 @@ li {
                     display: block;
                     max-width: 316px;
                     margin: 0 auto;
-                    display: block;
                     &:before {
                         content: "";
                         height: 380px;
